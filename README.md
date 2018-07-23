@@ -2,3 +2,4 @@
 ---
 ## 第一部分:
 * [DesignPattern(设计模式)](https://github.com/garaiya/java-learning-route/blob/master/Part1/DesignPattern)
+    * [面向对象六大原则](https://github.com/garaiya/java-learning-route/blob/master/Part1/DesignPattern/面向对象设计原则.md)
