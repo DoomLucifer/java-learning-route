@@ -1,15 +1,25 @@
+[TOC]
+
 # IOC&DI
+
 > Ioc--Inversion of Control，即"控制反转".
 - 控制
+
 > 传统JavaSE中，直接在对象内部通过new进行创建对象，是程序主动创建依赖对象；而IOC是由IOC容器来控制对象的创建，也就是有容器来控制外部资源的获取（不只是对象还包括文件等）。
 - 反转
+
 > 传统应用程序是由我们自己在对象中主动创建依赖对象，是正转；而反转则是由容器来创建及注入依赖对象，为何是反转？因为容器帮我们查找及注入依赖对象，对象只是被动的接受依赖对象，所以是反转；依赖对象的获取被反转了。
 
 - 传统JavaSE
+
 ![传统JavaSE](https://raw.githubusercontent.com/garaiya/java-learning-route/master/Part1/Spring/images/JavaSE-traditional.png)
+
 - IOC容器
-![094c4afc.png](:storage/04fc9ff9-0442-4c12-b585-bf742f0ab7c4/094c4afc.png)
-- DI(Dependency Injection)
+
+![IOC容器](https://raw.githubusercontent.com/garaiya/java-learning-route/master/Part1/Spring/images/Spring-IOC.png)
+
+## DI(Dependency Injection)
+
 > 依赖注入：组件之间依赖关系有容器在运行期决定，形象的说，即有容器动态的将某个依赖关系注入到组件中。
 - Bean
 > 就是由spring容器初始化、装配及管理的对象
@@ -90,5 +100,7 @@ public interface ResourceLoader{
 > " * " ：匹配零个或多个字符
 > classpath*：表示支持加载所有匹配的类路径Resource；Spring提供ResourcePatternResolver接口来加载多个Resource，该接口继承了ResourceLoader并添加了Resource[] getResources(String locationPattern)用来加载多个Resource
 > spring提供了一个ResourcePatternResolver实现PathMatchingResourcePatternResolver,基于模式匹配，默认使用AntPathMatcher进行路径匹配，它除了支持ResourceLoader支持的前缀外，还额外支持classpath:用于加载所有匹配的类路径Resource，ResourceLoader不支持前缀classpath:
-- SpEL表达式
-![875da03d.png](:storage/04fc9ff9-0442-4c12-b585-bf742f0ab7c4/875da03d.png)
+## SpEL表达式
+
+![SpEL原理](https://raw.githubusercontent.com/garaiya/java-learning-route/master/Part1/Spring/images/SpEL.png)
+
