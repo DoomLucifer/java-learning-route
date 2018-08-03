@@ -6,7 +6,7 @@
 > 传统应用程序是由我们自己在对象中主动创建依赖对象，是正转；而反转则是由容器来创建及注入依赖对象，为何是反转？因为容器帮我们查找及注入依赖对象，对象只是被动的接受依赖对象，所以是反转；依赖对象的获取被反转了。
 
 - 传统JavaSE
-![76c37f30.png](:storage/04fc9ff9-0442-4c12-b585-bf742f0ab7c4/76c37f30.png)
+![传统JavaSE](https://raw.githubusercontent.com/garaiya/java-learning-route/master/Part1/Spring/images/JavaSE-traditional.png)
 - IOC容器
 ![094c4afc.png](:storage/04fc9ff9-0442-4c12-b585-bf742f0ab7c4/094c4afc.png)
 - DI(Dependency Injection)
