@@ -4,5 +4,5 @@ root = true
 [*]
 indent_style = tab
 
-[spring-core.md]
+[*]
 tab_width = 4
