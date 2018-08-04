@@ -17,7 +17,7 @@ public ClassPathXmlApplicationContext(String[] configLocations, boolean refresh,
     this.setConfigLocations(configLocations);
     if(refresh) {
     	this.refresh();
-  	}
+	}
 }
 ```
 
