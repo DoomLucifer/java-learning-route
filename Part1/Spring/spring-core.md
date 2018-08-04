@@ -30,7 +30,6 @@ super(parent)-->AbstractXmlApplicationContext(ApplicationContext parent)-->Abstr
 }
 //this()
 public AbstractApplicationContext() {
-
 	this.logger = LogFactory.getLog(this.getClass());
     this.id = ObjectUtils.identityToString(this);
     this.displayName = ObjectUtils.identityToString(this);
