@@ -59,7 +59,7 @@ public void setConfigLocations(String... locations) {
         this.configLocations = new String[locations.length];
 
         for(int i = 0; i < locations.length; ++i) {
-                this.configLocations[i] = this.resolvePath(locations[i]).trim();
+			this.configLocations[i] = this.resolvePath(locations[i]).trim();
         }
 	} else {
 		this.configLocations = null;
