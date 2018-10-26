@@ -1182,5 +1182,38 @@ type一般不需要指定，除了泛型集合那种。除此之外，constructo
 </bean>
 ```
 
-9. ceshi 
-10. 
+9. Qualifier解析
+
+配置示例：
+
+```xml
+<bean class="base.Student">
+    <property name="name" value="skywalker"></property>
+    <property name="age" value="12"></property>
+    <qualifier type="org.springframework.beans.factory.annotation.Qualifier" value="student" />
+</bean>	
+<bean class="base.Student">
+    <property name="name" value="seaswalker"></property>
+    <property name="age" value="15"></property>
+    <qualifier value="student_2"></qualifier>
+</bean>
+<bean class="base.SimpleBean" />
+```
+
+SimpleBean部分源码：
+
+```java
+@Autowired
+@Qualifier("student")
+private Student student;
+```
+
+此标签和@Qualifier, @Autowired两个注解一起使用才有作用。@Autowired注解采用按类型查找的方式进行注入，如果找到多个需要类型的bean便会报错，有了@Qualifier标签就可以再按照此注解指定的名称查找。两者结合相当于实现了按类型+名称注入。type属性可以不指定，因为默认就是那个。qualifier标签可以有attribute子元素，比如:
+
+```xml
+<qualifier type="org.springframework.beans.factory.annotation.Qualifier" value="student">
+    <attribute key="id" value="1"/>
+</qualifier>
+```
+
+貌似是用来在qualifier也区分不开的时候使用。attribute键值对保存在BeanMetadataAttribute对象中。整个qualifier保存在AutowireCandidateQualifier对象中。
