@@ -638,6 +638,131 @@ public interface Scope {
 
 ### Resource基础
 
+#### Resource接口
+
+Spring的Resource接口代表底层外部资源，提供了对底层外部资源的一致性访问接口。
+
+```java
+public interface InputStreamSource{
+    InputStream getInputStream() throws IOException;
+}
+```
+
+```java
+public interface Resource extends InputStreamSource {
+    boolean exists();
+    boolean isReadable();
+    boolean isOpen();
+    URL getURL() throws IOException;  
+    URI getURI() throws IOException;  
+    File getFile() throws IOException;  
+    long contentLength() throws IOException;  
+    long lastModified() throws IOException;  
+    Resource createRelative(String relativePath) throws IOException;  
+    String getFilename();  
+    String getDescription(); 
+}
+```
+
+1. InputStreamSource接口解析：
+
+**getInputStream**：每次调用都将返回一个新鲜的资源对应的java.io. InputStream字节流，调用者在使用完毕后必须关闭该资源。
+
+2. Resource接口继承InputStreamSource接口，并提供一些便利方法：
+
+   **exists**：返回当前Resource代表的底层资源是否存在，true表示存在。
+
+​       **isReadable**：返回当前Resource代表的底层资源是否可读，true表示可读。
+
+​       **isOpen**：返回当前Resource代表的底层资源是否已经打开，如果返回true，则只能被读取一次然后关闭以避免资源泄露；常见的Resource实现一般返回false。
+
+​       **getURL**：如果当前Resource代表的底层资源能由java.util.URL代表，则返回该URL，否则抛出IOException。
+
+​       **getURI**：如果当前Resource代表的底层资源能由java.util.URI代表，则返回该URI，否则抛出IOException。
+
+​       **getFile**：如果当前Resource代表的底层资源能由java.io.File代表，则返回该File，否则抛出IOException。
+
+​       **contentLength**：返回当前Resource代表的底层文件资源的长度，一般是值代表的文件资源的长度。
+
+​       **lastModified**：返回当前Resource代表的底层资源的最后修改时间。
+
+​       **createRelative**：用于创建相对于当前Resource代表的底层资源的资源，比如当前Resource代表文件资源“d:/test/”则createRelative（“test.txt”）将返回表文件资源“d:/test/test.txt”Resource资源。
+
+​       **getFilename**：返回当前Resource代表的底层文件资源的文件路径，比如File资源“file://d:/test.txt”将返回“d:/test.txt”，而URL资源http://www.javass.cn将返回“”，因为只返回文件路径。
+
+​       **getDescription**：返回当前Resource代表的底层资源的描述符，通常就是资源的全路径（实际文件名或实际URL地址）。
+
+Resource接口提供了足够的抽象，足够满足我们日常使用。而且提供了很多内置Resource实现：ByteArrayResource、InputStreamResource 、FileSystemResource 、UrlResource 、ClassPathResource、ServletContextResource、VfsResource等。
+
+### 访问Resource
+
+#### ResourceLoader接口
+
+ResourceLoader接口用于返回Resource对象；其实现可以看作是一个生产Resource的工厂类
+
+```java
+public interface ResourceLoader{
+    Resource getResource(String location);
+    ClassLoader getClassLoader();
+}
+```
+
+getResource接口用于根据提供的location参数返回相应的Resource对象；而getClassLoader则返回加载这些Resource的ClassLoader。
+
+Spring提供了一个适用于所有环境的DefaultResourceLoader实现，可以返回ClassPathResource、UrlResource；还提供一个用于web环境的ServletContextResourceLoader，它继承了DefaultResourceLoader的所有功能，又额外提供了获取ServletContextResource的支持。
+
+ResourceLoader在进行加载资源时需要使用前缀来指定需要加载：“classpath:path”表示返回ClasspathResource，“http://path”和“file:path”表示返回UrlResource资源，如果不加前缀则需要根据当前上下文来决定，DefaultResourceLoader默认实现可以加载classpath资源
+
+```java
+@Test  
+public void testResourceLoad() {  
+    ResourceLoader loader = new DefaultResourceLoader();  
+    Resource resource = 			   loader.getResource("classpath:cn/javass/spring/chapter4/test1.txt");  
+    //验证返回的是ClassPathResource  
+    Assert.assertEquals(ClassPathResource.class, resource.getClass());  
+    Resource resource2 = loader.getResource("file:cn/javass/spring/chapter4/test1.txt");  
+    //验证返回的是ClassPathResource  
+    Assert.assertEquals(UrlResource.class, resource2.getClass());  
+    Resource resource3 = loader.getResource("cn/javass/spring/chapter4/test1.txt");  
+    //验证返默认可以加载ClasspathResource  
+    Assert.assertTrue(resource3 instanceof ClassPathResource);  
+}  
+```
+
+ 对于目前所有ApplicationContext都实现了ResourceLoader，因此可以使用其来加载资源。
+
+**ClassPathXmlApplicationContext**：不指定前缀将返回默认的ClassPathResource资源，否则将根据前缀来加载资源；
+
+**FileSystemXmlApplicationContext**：不指定前缀将返回FileSystemResource，否则将根据前缀来加载资源；
+
+**WebApplicationContext**：不指定前缀将返回ServletContextResource，否则将根据前缀来加载资源；
+
+**其他：**不指定前缀根据当前上下文返回Resource实现，否则将根据前缀来加载资源。
+
+#### ResourceLoaderAware接口
+
+ResourceLoaderAware是一个标记接口，用于通过ApplicationContext上下文注入ResourceLoader。
+
+```java
+public interface ResourceLoaderAware{
+    void setResourceLoader(ResourceLoader resourceLoader);
+}
+```
+
+注：ApplicationContext就是个ResourceLoader
+
+#### 注入Resource
+
+Spring提供了一个PropertyEditor “ResourceEditor”用于在注入的字符串和Resource之间进行转换。因此可以使用注入方式注入Resource。
+
+ResourceEditor完全使用ApplicationContext根据注入的路径字符串获取相应的Resource，说白了还是自己做还是容器帮你做的问题。
+
+原文地址：http://jinnianshilongnian.iteye.com/blog/1416321
+
+### Resource通配符
+
+#### 通配符加载Resource
+
 
 
 
